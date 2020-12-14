@@ -47,20 +47,12 @@
         android:id="@+id/stop"
         />
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Show location"
-        android:layout_centerInParent="true"
-        android:layout_below="@+id/stop"
-        android:id="@+id/show"
-        />
-    <Button
         android:id="@+id/btsms"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_centerInParent="true"
-        android:layout_below="@+id/show"
+        android:layout_below="@+id/stop"
         android:background="@color/teal_700"
         android:text="Send sms"></Button>
 </RelativeLayout>

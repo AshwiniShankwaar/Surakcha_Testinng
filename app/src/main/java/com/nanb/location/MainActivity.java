@@ -7,10 +7,13 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.app.ActivityManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -39,12 +42,15 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> alist = new ArrayList<String>();
     private ArrayList<String> listOfLines = new ArrayList<>();
     ListView contactlist;
+    private BroadcastReceiver MyReceiver = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        MyReceiver = new MyReceiver();
+        broadcastIntent();
         checkpermission();
 
         contactlist = (ListView) findViewById(R.id.contactlist);
@@ -114,6 +120,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });*/
 
+    }
+
+    private void broadcastIntent() {
+        registerReceiver(MyReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
 
     private void checkpermission() {
