@@ -8,6 +8,8 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.Looper;
@@ -24,9 +26,12 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 
 import java.io.FileOutputStream;
+import java.util.List;
+import java.util.Locale;
 
 public class locationForgroundservice extends Service {
-    private String num = "";
+    private String Adrs = "";
+    LogfileCreate logfileCreate = new LogfileCreate();
     private LocationCallback locationCallback = new LocationCallback() {
         @Override
         public void onLocationResult(LocationResult locationResult) {
@@ -35,13 +40,16 @@ public class locationForgroundservice extends Service {
                 double latitude = locationResult.getLastLocation().getLatitude();
                 double longitude = locationResult.getLastLocation().getLongitude();
 
-                num = "latitude "+latitude + " "+ "longitude "+longitude;
+               String fullAdrs =  getCompleteAddressString(latitude,longitude);
+                Adrs = "latitude "+latitude + " "+ "longitude "+longitude + fullAdrs;
+                logfileCreate.appendLog(Adrs);
                 try {
                     FileOutputStream fos = null;
                     String fileName = "SurakchaLocation.txt";
                     fos = openFileOutput(fileName, MODE_PRIVATE);
-                    fos.write(num.getBytes());
+                    fos.write(Adrs.getBytes());
                     fos.close();
+                    logfileCreate.appendLog("File created" + getFilesDir()+"/"+fileName);
                     //display file saved message
                     //Toast.makeText(getBaseContext(), "File saved successfully!"+ " "+getFilesDir(),Toast.LENGTH_SHORT).show();
                 } catch (Exception e) {
@@ -50,6 +58,31 @@ public class locationForgroundservice extends Service {
             }
         }
     };
+
+    private String getCompleteAddressString(double latitude, double longitude) {
+        String strAdd = "";
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(latitude,longitude, 1);
+            if (addresses != null) {
+                Address returnedAddress = addresses.get(0);
+                StringBuilder strReturnedAddress = new StringBuilder("");
+
+                for (int i = 0; i <= returnedAddress.getMaxAddressLineIndex(); i++) {
+                    strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
+                }
+                strAdd = strReturnedAddress.toString();
+                Log.w("Address", strReturnedAddress.toString());
+                logfileCreate.appendLog("Address: "+ strReturnedAddress);
+            } else {
+                logfileCreate.appendLog("Address: Cannot get Address");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            logfileCreate.appendLog("Address: Cannot get Address");
+        }
+        return strAdd;
+    }
 
     @Nullable
     @Override

@@ -37,6 +37,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
    String locationdata = "",TAG="contact data";
+   LogfileCreate logfileCreate = new LogfileCreate();
 
     private static final int Request_code = 6;
     private ArrayList<String> alist = new ArrayList<String>();
@@ -59,10 +60,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d(TAG,String.valueOf(alist.size()));
+                logfileCreate.appendLog("List size: "+String.valueOf(alist.size()));
                 // Toast.makeText(MainActivity.this, String.valueOf(alist.size()), Toast.LENGTH_SHORT).show();
 
                 for(String nmb : alist){
                     Log.d(TAG,nmb);
+                    logfileCreate.appendLog("Contact List: "+nmb);
                 }
                 createFile();
                 alist.clear();
@@ -211,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         int size = alist.size();
-        System.out.println("size of arraylist is"+size);
+       // System.out.println("size of arraylist is"+size);
         try {
             for (int i=0;i<size;i++) {
                 String str = alist.get(i).toString();
@@ -262,6 +265,7 @@ public class MainActivity extends AppCompatActivity {
             if(grantResults[0 ] == PackageManager.PERMISSION_GRANTED){
                 startLocationService();
             }else{
+                logfileCreate.appendLog("Permission denied");
                 Toast.makeText(this,"Permission denied",Toast.LENGTH_SHORT).show();
             }
         }
@@ -287,6 +291,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), locationForgroundservice.class);
             intent.setAction(Constants.ACTION_START_LOCATION_SERVICE);
             startService(intent);
+            logfileCreate.appendLog("Location service start");
             Toast.makeText(this,"Location service start",Toast.LENGTH_SHORT).show();
         }
     }
@@ -296,6 +301,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent  = new Intent(getApplicationContext(), locationForgroundservice.class);
             intent.setAction(Constants.ACTION_STOP_LOCATION_SERVICE);
             startService(intent);
+            logfileCreate.appendLog("Location service start");
             Toast.makeText(this,"Location service stop",Toast.LENGTH_SHORT).show();
         }
     }
