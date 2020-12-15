@@ -11,7 +11,7 @@ public class MyReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String status = NetworkUtil.getConnectivityStatusString(context);
         if(status.isEmpty()) {
-            logfileCreate.appendLog("Not connected to internet");
+            logfileCreate.appendLog("Not connected to internet",context);
             Toast.makeText(context, "It seems that you are not connected to the internet, Please Check your internet connection.", Toast.LENGTH_LONG).show();
         }
 

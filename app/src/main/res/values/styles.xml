@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="CustomAlertDailog" parent="Theme.AppCompat.Light.Dialog.Alert" >
+        <item name="android:windowBackground">@drawable/popup_background</item>
+        <item name="android:layout_height">100dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="buttonBarPositiveButtonStyle">@style/positivebutton</item>
+        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+    </style>
+
+    <style name="positivebutton" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">#DDA0DD</item>
+    </style>
+    <style name="NegativeButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">#DDA0DD</item>
+    </style>
+</resources>

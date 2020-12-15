@@ -41,15 +41,15 @@ public class locationForgroundservice extends Service {
                 double longitude = locationResult.getLastLocation().getLongitude();
 
                String fullAdrs =  getCompleteAddressString(latitude,longitude);
-                Adrs = "latitude "+latitude + " "+ "longitude "+longitude + fullAdrs;
-                logfileCreate.appendLog(Adrs);
+                Adrs = "latitude: "+latitude + ", longitude: "+longitude + " Address: "+fullAdrs;
+                logfileCreate.appendLog(Adrs,getApplicationContext());
                 try {
                     FileOutputStream fos = null;
                     String fileName = "SurakchaLocation.txt";
                     fos = openFileOutput(fileName, MODE_PRIVATE);
                     fos.write(Adrs.getBytes());
                     fos.close();
-                    logfileCreate.appendLog("File created" + getFilesDir()+"/"+fileName);
+                    logfileCreate.appendLog("File created" + getFilesDir()+"/"+fileName,getApplicationContext());
                     //display file saved message
                     //Toast.makeText(getBaseContext(), "File saved successfully!"+ " "+getFilesDir(),Toast.LENGTH_SHORT).show();
                 } catch (Exception e) {
@@ -73,13 +73,13 @@ public class locationForgroundservice extends Service {
                 }
                 strAdd = strReturnedAddress.toString();
                 Log.w("Address", strReturnedAddress.toString());
-                logfileCreate.appendLog("Address: "+ strReturnedAddress);
+                logfileCreate.appendLog("Address: "+ strReturnedAddress,getApplicationContext());
             } else {
-                logfileCreate.appendLog("Address: Cannot get Address");
+                logfileCreate.appendLog("Address: Cannot get Address",getApplicationContext());
             }
         } catch (Exception e) {
             e.printStackTrace();
-            logfileCreate.appendLog("Address: Cannot get Address");
+            logfileCreate.appendLog("Address: Cannot get Address",getApplicationContext());
         }
         return strAdd;
     }
@@ -113,8 +113,8 @@ public class locationForgroundservice extends Service {
         }
 
         LocationRequest locationRequest = new LocationRequest();
-        locationRequest.setInterval(300000);
-        locationRequest.setFastestInterval(60000);
+        locationRequest.setInterval(5000);
+        locationRequest.setFastestInterval(1000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;

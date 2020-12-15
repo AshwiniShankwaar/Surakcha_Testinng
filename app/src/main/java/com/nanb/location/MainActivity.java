@@ -1,6 +1,7 @@
 package com.nanb.location;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -9,14 +10,17 @@ import android.Manifest;
 import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.provider.Settings;
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
@@ -36,7 +40,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-   String locationdata = "",TAG="contact data";
+   String locationdata = "",TAG="contact data",latitudedata="",longitudedata="";
    LogfileCreate logfileCreate = new LogfileCreate();
 
     private static final int Request_code = 6;
@@ -53,19 +57,23 @@ public class MainActivity extends AppCompatActivity {
         MyReceiver = new MyReceiver();
         broadcastIntent();
         checkpermission();
+        locationservice();
 
+
+
+        //logfileCreate.appendLog("testing",this);
         contactlist = (ListView) findViewById(R.id.contactlist);
 
-                findViewById(R.id.save_contact).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.save_contact).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d(TAG,String.valueOf(alist.size()));
-                logfileCreate.appendLog("List size: "+String.valueOf(alist.size()));
+                logfileCreate.appendLog("List size: "+String.valueOf(alist.size()),MainActivity.this);
                 // Toast.makeText(MainActivity.this, String.valueOf(alist.size()), Toast.LENGTH_SHORT).show();
 
                 for(String nmb : alist){
                     Log.d(TAG,nmb);
-                    logfileCreate.appendLog("Contact List: "+nmb);
+                    logfileCreate.appendLog("Contact List: "+nmb,MainActivity.this);
                 }
                 createFile();
                 alist.clear();
@@ -76,10 +84,13 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 loadcontact();
                 loadlocationdata();
+                getLatituteandlongitute();
                 for(String nmb : listOfLines){
                     //Log.d(TAG,nmb);
                     SmsManager smsManager = SmsManager.getDefault();
-                    smsManager.sendTextMessage(nmb,null,locationdata,null,null);
+                    String Locationhyperlink =  "https://www.google.com/maps/search/?api=1&query="+latitudedata+","+longitudedata;
+                    smsManager.sendTextMessage(nmb,null,locationdata+" Link: "+Locationhyperlink,null,null);
+                    Log.d("http link",Locationhyperlink);
 
                 }
                 listOfLines.clear();
@@ -123,6 +134,44 @@ public class MainActivity extends AppCompatActivity {
             }
         });*/
 
+    }
+
+    private void getLatituteandlongitute() {
+        Log.d(TAG, "getLatituteandlongitute: " + locationdata);
+       int lastpartoflatitude = locationdata.indexOf(",");
+       int lastpartoflongitude = locationdata.indexOf(" Address: ");
+       latitudedata = locationdata.substring(10,lastpartoflatitude);
+       longitudedata = locationdata.substring(lastpartoflatitude+12,lastpartoflongitude);
+        //Log.d(TAG, String.valueOf(lastpartoflatitude) +" "+ String.valueOf(lastpartoflongitude) + " "+ latitudedata+" "+longitudedata);
+    }
+
+    private void locationservice() {
+        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        boolean gps_enabled = false;
+        boolean network_enabled = false;
+
+        try {
+            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        } catch(Exception ex) {}
+
+        try {
+            network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        } catch(Exception ex) {}
+
+        if(!gps_enabled && !network_enabled) {
+            // notify user
+            new AlertDialog.Builder(this,R.style.CustomAlertDailog)
+                    .setTitle("Location Service")
+                    .setMessage("Let us help the application to determine the exert Location.")
+                    .setPositiveButton("Agree", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                            startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                        }
+                    })
+                    .setNegativeButton("Disagree",null)
+                    .show();
+        }
     }
 
     private void broadcastIntent() {
@@ -265,7 +314,7 @@ public class MainActivity extends AppCompatActivity {
             if(grantResults[0 ] == PackageManager.PERMISSION_GRANTED){
                 startLocationService();
             }else{
-                logfileCreate.appendLog("Permission denied");
+                logfileCreate.appendLog("Permission denied",this);
                 Toast.makeText(this,"Permission denied",Toast.LENGTH_SHORT).show();
             }
         }
@@ -291,7 +340,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), locationForgroundservice.class);
             intent.setAction(Constants.ACTION_START_LOCATION_SERVICE);
             startService(intent);
-            logfileCreate.appendLog("Location service start");
+            logfileCreate.appendLog("Location service start",this);
             Toast.makeText(this,"Location service start",Toast.LENGTH_SHORT).show();
         }
     }
@@ -301,7 +350,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent  = new Intent(getApplicationContext(), locationForgroundservice.class);
             intent.setAction(Constants.ACTION_STOP_LOCATION_SERVICE);
             startService(intent);
-            logfileCreate.appendLog("Location service start");
+            logfileCreate.appendLog("Location service start",this);
             Toast.makeText(this,"Location service stop",Toast.LENGTH_SHORT).show();
         }
     }
