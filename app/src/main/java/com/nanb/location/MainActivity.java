@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
     private void getLatituteandlongitute() {
         Log.d(TAG, "getLatituteandlongitute: " + locationdata);
        int lastpartoflatitude = locationdata.indexOf(",");
-       int lastpartoflongitude = locationdata.indexOf(" Address: ");
+       int lastpartoflongitude = locationdata.indexOf(", Address: ");
        latitudedata = locationdata.substring(10,lastpartoflatitude);
        longitudedata = locationdata.substring(lastpartoflatitude+12,lastpartoflongitude);
         //Log.d(TAG, String.valueOf(lastpartoflatitude) +" "+ String.valueOf(lastpartoflongitude) + " "+ latitudedata+" "+longitudedata);

@@ -41,7 +41,7 @@ public class locationForgroundservice extends Service {
                 double longitude = locationResult.getLastLocation().getLongitude();
 
                String fullAdrs =  getCompleteAddressString(latitude,longitude);
-                Adrs = "latitude: "+latitude + ", longitude: "+longitude + " Address: "+fullAdrs;
+                Adrs = "latitude: "+latitude + ", longitude: "+longitude + ", Address: "+fullAdrs;
                 logfileCreate.appendLog(Adrs,getApplicationContext());
                 try {
                     FileOutputStream fos = null;
