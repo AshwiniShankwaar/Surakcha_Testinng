@@ -97,9 +97,9 @@ public class locationForgroundservice extends Service {
         PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), channel_id);
         builder.setSmallIcon(R.mipmap.ic_launcher);
-        builder.setContentTitle("Location server");
+        builder.setContentTitle("Surakcha Location service");
         builder.setDefaults(NotificationCompat.DEFAULT_ALL);
-        builder.setContentText("Runnning");
+        builder.setContentText("Running...");
         builder.setContentIntent(pendingIntent);
         builder.setAutoCancel(false);
         builder.setPriority(NotificationCompat.PRIORITY_MAX);

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".contactactivity">
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/back"
+        android:layout_alignParentStart="true"
+        android:padding="10dp"
+        android:layout_marginTop="2dp"
+        android:layout_alignParentTop="true"
+        android:id="@+id/cancel"
+        />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/Save"
+        android:padding="3dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="2dp"
+        android:textAllCaps="false"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:text="Save"
+        android:visibility="gone"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="Contact list"
+        android:layout_marginTop="2dp"
+        android:padding="5dp"
+        android:layout_marginBottom="2dp"
+        android:textStyle="bold"
+        android:id="@+id/text"
+        android:textSize="20dp"/>
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/contactlist"
+        android:layout_below="@+id/text"
+        android:layout_marginBottom="5dp"
+        android:padding="10dp">
+    </ListView>
+
+</RelativeLayout>
