@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
                         ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.SEND_SMS},1);
                     }else{
                         try{
-                            String phnnbr = "8709337435";
+
                             File file = new File(MainActivity.this.getFilesDir(),"Surakchacontact.txt");
                             if(file.exists()){
                                 loadcontact();
@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                                     Log.d("http link",Locationhyperlink);
                                     SmsManager smsManager = SmsManager.getDefault();
                                     ArrayList<String> parts = smsManager.divideMessage("Latitude: "+latitudedata+"\nLongitude: "+longitudedata+"\nAddress: "+AddressData+"\nGoogle map Link: "+Locationhyperlink);
-                                    smsManager.sendMultipartTextMessage(phnnbr,null,parts,null,null);
+                                    smsManager.sendMultipartTextMessage(nmb,null,parts,null,null);
                                 }
                             }
                             else{
